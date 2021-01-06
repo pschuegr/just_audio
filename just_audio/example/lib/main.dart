@@ -20,24 +20,20 @@ class _MyAppState extends State<MyApp> {
       child: ClippingAudioSource(
         start: Duration(seconds: 60),
         end: Duration(seconds: 65),
-        child: AudioSource.uri(Uri.parse(
-            "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3")),
+        child: AudioSource.uri(Uri.parse("https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3")),
         tag: AudioMetadata(
           album: "Science Friday",
           title: "A Salute To Head-Scratching Science (5 seconds)",
-          artwork:
-              "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+          artwork: "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
         ),
       ),
     ),
     AudioSource.uri(
-      Uri.parse(
-          "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"),
+      Uri.parse("https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"),
       tag: AudioMetadata(
         album: "Science Friday",
         title: "A Salute To Head-Scratching Science",
-        artwork:
-            "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+        artwork: "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
       ),
     ),
     AudioSource.uri(
@@ -45,8 +41,7 @@ class _MyAppState extends State<MyApp> {
       tag: AudioMetadata(
         album: "Science Friday",
         title: "From Cat Rheology To Operatic Incompetence",
-        artwork:
-            "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+        artwork: "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
       ),
     ),
   ]);
@@ -101,12 +96,10 @@ class _MyAppState extends State<MyApp> {
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child:
-                                Center(child: Image.network(metadata.artwork)),
+                            child: Center(child: Image.network(metadata.artwork)),
                           ),
                         ),
-                        Text(metadata.album ?? '',
-                            style: Theme.of(context).textTheme.headline6),
+                        Text(metadata.album ?? '', style: Theme.of(context).textTheme.headline6),
                         Text(metadata.title ?? ''),
                       ],
                     );
@@ -114,6 +107,11 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               ControlButtons(_player),
+              IconButton(
+                icon: Icon(Icons.cancel),
+                iconSize: 64.0,
+                onPressed: () => _playlist.removeAt(0),
+              ),
               StreamBuilder<Duration>(
                 stream: _player.durationStream,
                 builder: (context, snapshot) {
@@ -157,9 +155,7 @@ class _MyAppState extends State<MyApp> {
                       return IconButton(
                         icon: icons[index],
                         onPressed: () {
-                          _player.setLoopMode(cycleModes[
-                              (cycleModes.indexOf(loopMode) + 1) %
-                                  cycleModes.length]);
+                          _player.setLoopMode(cycleModes[(cycleModes.indexOf(loopMode) + 1) % cycleModes.length]);
                         },
                       );
                     },
@@ -201,9 +197,7 @@ class _MyAppState extends State<MyApp> {
                     return ListView.builder(
                       itemCount: sequence.length,
                       itemBuilder: (context, index) => Material(
-                        color: index == state.currentIndex
-                            ? Colors.grey.shade300
-                            : null,
+                        color: index == state.currentIndex ? Colors.grey.shade300 : null,
                         child: ListTile(
                           title: Text(sequence[index].tag.title),
                           onTap: () {
@@ -260,8 +254,7 @@ class ControlButtons extends StatelessWidget {
             final playerState = snapshot.data;
             final processingState = playerState?.processingState;
             final playing = playerState?.playing;
-            if (processingState == ProcessingState.loading ||
-                processingState == ProcessingState.buffering) {
+            if (processingState == ProcessingState.loading || processingState == ProcessingState.buffering) {
               return Container(
                 margin: EdgeInsets.all(8.0),
                 width: 64.0,
@@ -284,8 +277,7 @@ class ControlButtons extends StatelessWidget {
               return IconButton(
                 icon: Icon(Icons.replay),
                 iconSize: 64.0,
-                onPressed: () => player.seek(Duration.zero,
-                    index: player.effectiveIndices.first),
+                onPressed: () => player.seek(Duration.zero, index: player.effectiveIndices.first),
               );
             }
           },
@@ -300,8 +292,7 @@ class ControlButtons extends StatelessWidget {
         StreamBuilder<double>(
           stream: player.speedStream,
           builder: (context, snapshot) => IconButton(
-            icon: Text("${snapshot.data?.toStringAsFixed(1)}x",
-                style: TextStyle(fontWeight: FontWeight.bold)),
+            icon: Text("${snapshot.data?.toStringAsFixed(1)}x", style: TextStyle(fontWeight: FontWeight.bold)),
             onPressed: () {
               _showSliderDialog(
                 context: context,
@@ -347,8 +338,8 @@ class _SeekBarState extends State<SeekBar> {
         Slider(
           min: 0.0,
           max: widget.duration.inMilliseconds.toDouble(),
-          value: min(_dragValue ?? widget.position.inMilliseconds.toDouble(),
-              widget.duration.inMilliseconds.toDouble()),
+          value:
+              min(_dragValue ?? widget.position.inMilliseconds.toDouble(), widget.duration.inMilliseconds.toDouble()),
           onChanged: (value) {
             setState(() {
               _dragValue = value;
@@ -368,10 +359,7 @@ class _SeekBarState extends State<SeekBar> {
           right: 16.0,
           bottom: 0.0,
           child: Text(
-              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                      .firstMatch("$_remaining")
-                      ?.group(1) ??
-                  '$_remaining',
+              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$').firstMatch("$_remaining")?.group(1) ?? '$_remaining',
               style: Theme.of(context).textTheme.caption),
         ),
       ],
@@ -402,10 +390,7 @@ _showSliderDialog({
           child: Column(
             children: [
               Text('${snapshot.data?.toStringAsFixed(1)}$valueSuffix',
-                  style: TextStyle(
-                      fontFamily: 'Fixed',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24.0)),
+                  style: TextStyle(fontFamily: 'Fixed', fontWeight: FontWeight.bold, fontSize: 24.0)),
               Slider(
                 divisions: divisions,
                 min: min,
